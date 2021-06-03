@@ -6,6 +6,8 @@ RailsAdmin.config do |config|
 
   config.audit_with :paper_trail, 'Person', 'PaperTrail::Version'
 
+  config.excluded_models << Admin
+
   config.show_gravatar = false
 
   config.actions do
