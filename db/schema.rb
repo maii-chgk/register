@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_200457) do
+ActiveRecord::Schema.define(version: 2021_06_03_200620) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2021_06_03_200457) do
     t.string "name"
     t.string "email"
     t.string "cyrillic_name"
+    t.date "start_date"
   end
 
   create_table "versions", force: :cascade do |t|
