@@ -17,7 +17,7 @@ class DiscourseClient
     execute(query, group_name).to_a
   end
 
-  def self.list_voters(date, group_name: DEFAULT_GROUP)
+  def self.list_voters(day, group_name: DEFAULT_GROUP)
     group_filter = if group_name.nil?
                      ""
                    else
@@ -41,7 +41,8 @@ class DiscourseClient
       where poll_start >= $1 and poll_finish < $2
     SQL
 
-    execute(query, [date, Date.parse(date) + 1]).to_a
+    next_day = Date.parse(day) + 1
+    execute(query, [day, next_day]).to_a
   end
 
   def self.execute(query, params)
