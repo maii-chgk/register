@@ -1,5 +1,5 @@
 class Person < ApplicationRecord
-  has_and_belongs_to_many :assemblies
+  has_and_belongs_to_many :assemblies, -> { distinct }
 
   has_paper_trail
 

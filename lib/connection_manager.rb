@@ -14,11 +14,13 @@ class ConnectionManager
         return @pool if @pool
 
         @pool = ConnectionPool.new(size: 5) do
-          PG.connect(host: Rails.application.credentials.discourse_db[:host],
-                     port: Rails.application.credentials.discourse_db[:port],
-                     user: Rails.application.credentials.discourse_db[:user],
-                     password: Rails.application.credentials.discourse_db[:password],
-                     dbname: Rails.application.credentials.discourse_db[:dbname])
+          PG.connect(
+            host: Rails.application.credentials.discourse_db[:host],
+            port: Rails.application.credentials.discourse_db[:port],
+            user: Rails.application.credentials.discourse_db[:user],
+            password: Rails.application.credentials.discourse_db[:password],
+            dbname: Rails.application.credentials.discourse_db[:dbname]
+          )
         end
       end
     end
