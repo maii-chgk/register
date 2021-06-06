@@ -15,7 +15,8 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'rails_admin', '~> 2.1.1'
 gem 'devise', '~> 4.8.0'
 gem 'paper_trail', '~> 12.0.0'
-
+gem 'pg', '~> 1.2'
+gem 'connection_pool'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
