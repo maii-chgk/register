@@ -17,6 +17,7 @@ gem 'devise', '~> 4.8.0'
 gem 'paper_trail', '~> 12.0.0'
 gem 'pg', '~> 1.2'
 gem 'connection_pool'
+gem 'aws-sdk-s3', '~> 1.96.1'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
