@@ -1,4 +1,4 @@
-require_relative "../discourse_importer"
+require_relative "../discourse/importer"
 
 desc "Import founding members"
 task :import_founding_members => :environment do

@@ -1,11 +1,11 @@
 require 'date'
-require_relative './connection_manager'
+require_relative '../connection_manager'
 
 class DiscourseClient
   DEFAULT_GROUP = "organization_members"
 
   def self.list_group_members(group_name: DEFAULT_GROUP)
-    query = <<-SQL
+    query = <<~SQL
       select users.name, ue.email
       from users
       join group_users on users.id = group_users.user_id
@@ -24,7 +24,7 @@ class DiscourseClient
                      "where p.groups = '#{group_name}'"
                    end
 
-    query = <<-SQL
+    query = <<~SQL
       with poll_dates as (
           select p.id, min(poll_votes.created_at) as poll_start,
                  max(poll_votes.created_at) as poll_finish
@@ -43,6 +43,10 @@ class DiscourseClient
 
     next_day = Date.parse(day) + 1
     execute(query, [day, next_day]).to_a
+  end
+
+  def self.add_to_group(email, group)
+
   end
 
   def self.execute(query, params)

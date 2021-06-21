@@ -1,4 +1,4 @@
-require_relative "../discourse_importer"
+require_relative "../discourse/importer"
 
 desc "Create and import assembly"
 task :create_assembly => :environment do
