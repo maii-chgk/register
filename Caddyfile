@@ -6,7 +6,7 @@ register.razumau.net {
     root * /home/deploy/public
 
     encode zstd gzip
-    fileserver
+    file_server
 
     reverse_proxy @notStatic unix//home/deploy/puma.sock
 
