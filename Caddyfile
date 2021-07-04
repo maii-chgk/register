@@ -1,5 +1,15 @@
 register.razumau.net {
-    reverse_proxy unix//home/deploy/puma.sock
+    @notStatic {
+    	not file
+    }
+
+    root * /home/deploy/public
+
+    encode zstd gzip
+    fileserver
+
+    reverse_proxy @notStatic unix//home/deploy/puma.sock
+
     log {
     	output file /var/log/access.log {
     		roll_size 1gb
