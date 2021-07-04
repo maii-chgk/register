@@ -1,3 +1,13 @@
 register.razumau.net {
     reverse_proxy unix//home/deploy/puma.sock
+    log {
+    	output file /var/log/access.log {
+    		roll_size 1gb
+    		roll_keep 5
+    	}
+    }
+}
+
+www.register.razumau.net{
+	redir https://register.razumau.net{uri}
 }
