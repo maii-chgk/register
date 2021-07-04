@@ -1,0 +1,21 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=notify
+
+WatchdogSec=10
+
+User=deploy
+
+WorkingDirectory=/home/deploy/register
+
+Environment=RAILS_ENV=production
+
+ExecStart=/home/deploy/.rvm/gems/ruby-3.0.1/bin/puma -C /home/deploy/register/config/puma.rb
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
