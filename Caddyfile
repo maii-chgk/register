@@ -1,13 +1,12 @@
 register.razumau.net {
     @notStatic {
     	not file
-    	not path /assets/*
     }
 
-    root * /home/deploy/public
+    root * /home/deploy/register/public
 
     file_server
-
+    encode zstd gzip
     reverse_proxy @notStatic unix//home/deploy/puma.sock
 
     log {
