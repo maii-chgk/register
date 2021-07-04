@@ -1,4 +1,3 @@
 register.iiga.li {
-    log access.log
     reverse_proxy unix//home/deploy/puma.sock
 }
