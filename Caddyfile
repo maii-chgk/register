@@ -1,6 +1,7 @@
 register.razumau.net {
     @notStatic {
     	not file
+    	not path /assets/*
     }
 
     root * /home/deploy/public
