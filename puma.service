@@ -13,7 +13,7 @@ WorkingDirectory=/home/deploy/register
 
 Environment=RAILS_ENV=production
 
-ExecStart=/home/deploy/.rvm/gems/ruby-3.0.1/bin/puma -C /home/deploy/register/config/puma.rb config.ru
+ExecStart=/home/deploy/.rvm/gems/ruby-3.0.1/bin/puma -C /home/deploy/register/config/puma.rb /home/deploy/register/config.ru
 
 Restart=always
 
