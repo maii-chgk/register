@@ -1,9 +1,4 @@
 register.iiga.li {
-    gzip
-    root /home/deploy/register/public
     log access.log
-    reverse_proxy unix//home/deploy/puma.sock {
-        transparent
-        except /robots.txt /favicon.ico /404.html /422.html /500.html
-    }
+    reverse_proxy unix//home/deploy/puma.sock
 }
