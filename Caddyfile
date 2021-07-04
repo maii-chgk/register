@@ -8,6 +8,6 @@ register.razumau.net {
     }
 }
 
-www.register.razumau.net{
+www.register.razumau.net {
 	redir https://register.razumau.net{uri}
 }
