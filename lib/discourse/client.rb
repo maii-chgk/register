@@ -50,12 +50,25 @@ class DiscourseClient
     def add_to_group(email, group_name)
       group_id = fetch_group_id(group_name)
       user_id = fetch_user_id(email)
+
+      return if already_in_group?(group_id, user_id)
+
       query = <<~SQL
         insert into groups_users (group_id, user_id, created_at, updated_at)
         values ($1, $2, now(), now())
       SQL
 
       execute(query, [group_id, user_id])
+    end
+
+    def already_in_group?(group_id, user_id)
+      query = <<~SQL
+        select from group_users
+        where user_id = $1
+            and group_id = $2;
+      SQL
+
+      execute(query, [group_id, user_id]).num_tuples.positive?
     end
 
     def remove_from_group(email, group_name)
