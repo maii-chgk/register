@@ -7,6 +7,7 @@ class Person < ApplicationRecord
   has_paper_trail
 
   rails_admin do
+    include_fields :name, :cyrillic_name, :email, :verified, :newsletter, :start_date, :end_date
     exclude_fields :created_at, :updated_at, :id
 
     label "Человек"
