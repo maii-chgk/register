@@ -23,15 +23,31 @@ class Person < ApplicationRecord
     configure :start_date do
       label "Дата вступления"
     end
+
+    configure :end_date do
+      label "Дата выхода"
+    end
+
+    configure :verified do
+      label "Верификация"
+    end
+
+    configure :newsletter do
+      label "Рассылка"
+    end
   end
 
   private
 
+  def active?
+    verified && (end_date.blank? || end_date.after?(Date.today))
+  end
+
   def set_discourse_role
-    DiscourseClient.add_to_group(email, DiscourseClient::MAIN_GROUP)
+    DiscourseClient.add_to_group(email, DiscourseClient::MAIN_GROUP) if active?
   end
 
   def unset_discourse_role
-    DiscourseClient.remove_from_group(email, DiscourseClient::MAIN_GROUP)
+    DiscourseClient.remove_from_group(email, DiscourseClient::MAIN_GROUP) if active?
   end
 end
