@@ -50,8 +50,13 @@ module Discourse
 
       def add_to_group(email, group_name)
         group_id = fetch_group_id(group_name)
-        user_id = fetch_user_id(email)
+        return if group_id.nil?
 
+        user_id = fetch_user_id(email)
+        return if user_id.nil?
+
+        puts group_id
+        puts user_id
         return if already_in_group?(group_id, user_id)
 
         query = <<~SQL
@@ -74,7 +79,11 @@ module Discourse
 
       def remove_from_group(email, group_name)
         group_id = fetch_group_id(group_name)
+        return if group_id.nil?
+
         user_id = fetch_user_id(email)
+        return if user_id.nil?
+
         query = <<~SQL
           delete from group_users
           where user_id = $1
@@ -91,7 +100,9 @@ module Discourse
           where groups.name = $1;
         SQL
 
-        execute(query, group_name)
+        execute(query, group_name).getvalue(0, 0)
+      rescue ArgumentError
+        nil
       end
 
       def fetch_user_id(email)
@@ -101,14 +112,21 @@ module Discourse
           where email = $1
         SQL
 
-        execute(query, email)
+        execute(query, email).getvalue(0, 0)
+      rescue ArgumentError
+        nil
       end
 
       def execute(query, params)
+        puts 'running query'
+        puts query
+        puts params
         params = [params] unless params.kind_of?(Array)
 
         ConnectionManager.connection_pool.with do |connection|
-          connection.exec_params(query, params)
+          res = connection.exec_params(query, params)
+          puts res
+          res
         end
       end
     end
