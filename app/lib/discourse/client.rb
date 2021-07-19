@@ -60,7 +60,7 @@ module Discourse
         return if already_in_group?(group_id, user_id)
 
         query = <<~SQL
-          insert into groups_users (group_id, user_id, created_at, updated_at)
+          insert into group_users (group_id, user_id, created_at, updated_at)
           values ($1, $2, now(), now())
         SQL
 
