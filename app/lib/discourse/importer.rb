@@ -1,4 +1,4 @@
-require_relative "./client"
+require_relative "./ient"
 
 class DiscourseImporter
   attr_reader :client

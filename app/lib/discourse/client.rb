@@ -1,5 +1,5 @@
 require 'date'
-require_relative '../connection_manager'
+require_relative '../../../lib/connection_manager'
 
 class DiscourseClient
   MAIN_GROUP = "organization_members"

@@ -49,6 +49,6 @@ class Person < ApplicationRecord
   end
 
   def unset_discourse_role
-    DiscourseClient.remove_from_group(email, DiscourseClient::MAIN_GROUP) if active?
+    DiscourseClient.remove_from_group(email, DiscourseClient::MAIN_GROUP)
   end
 end
