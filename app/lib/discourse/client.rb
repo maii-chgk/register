@@ -55,26 +55,14 @@ module Discourse
         user_id = fetch_user_id(email)
         return if user_id.nil?
 
-        puts group_id
-        puts user_id
-        return if already_in_group?(group_id, user_id)
-
         query = <<~SQL
           insert into group_users (group_id, user_id, created_at, updated_at)
           values ($1, $2, now(), now())
         SQL
 
         execute(query, [group_id, user_id])
-      end
-
-      def already_in_group?(group_id, user_id)
-        query = <<~SQL
-          select from group_users
-          where user_id = $1
-              and group_id = $2;
-        SQL
-
-        execute(query, [group_id, user_id]).num_tuples.positive?
+      rescue PG::UniqueViolation
+        # Already added to the group
       end
 
       def remove_from_group(email, group_name)
@@ -118,15 +106,10 @@ module Discourse
       end
 
       def execute(query, params)
-        puts 'running query'
-        puts query
-        puts params
         params = [params] unless params.kind_of?(Array)
 
         ConnectionManager.connection_pool.with do |connection|
-          res = connection.exec_params(query, params)
-          puts res
-          res
+          connection.exec_params(query, params)
         end
       end
     end
