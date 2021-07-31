@@ -16,12 +16,6 @@ class PeopleController < ApplicationController
   private
 
   def subscribe_to_newsletter?
-    if params[:newsletter].present?
-      return true if params[:newsletter] == "Да"
-    end
-
-    return true if params[:join] == %w[Да Да]
-
-    false
+    params[:subscribe] == "Да"
   end
 end
