@@ -1,7 +1,7 @@
 class Person < ApplicationRecord
   has_and_belongs_to_many :assemblies, Proc.new { distinct }
 
-  after_update :set_discourse_role
+  after_update :maybe_change_membership
   after_destroy :unset_discourse_role
 
   has_paper_trail
@@ -40,12 +40,23 @@ class Person < ApplicationRecord
 
   private
 
+  def maybe_change_membership
+    return unless saved_change_to_verified?
+
+    if active?
+      set_discourse_role
+      AcceptanceConfirmationMailer::send_confirmation(email)
+    else
+      unset_discourse_role
+    end
+  end
+
   def active?
     verified && (end_date.blank? || end_date.after?(Date.today))
   end
 
   def set_discourse_role
-    Discourse::Client.add_to_group(email, Discourse::Client::MAIN_GROUP) if active?
+    Discourse::Client.add_to_group(email, Discourse::Client::MAIN_GROUP)
   end
 
   def unset_discourse_role
