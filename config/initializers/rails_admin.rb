@@ -7,7 +7,7 @@ RailsAdmin.config do |config|
   end
   config.current_user_method(&:current_admin)
 
-  config.audit_with :paper_trail, 'Person', 'PaperTrail::Version'
+  config.audit_with :paper_trail, 'Admin', 'PaperTrail::Version'
 
   config.excluded_models << Admin
 
