@@ -102,6 +102,7 @@ GEM
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
+    honeybadger (4.9.0)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
@@ -261,6 +262,7 @@ DEPENDENCIES
   byebug
   connection_pool
   devise (~> 4.8.0)
+  honeybadger (~> 4.0)
   listen (~> 3.3)
   paper_trail (~> 12.0.0)
   pg (~> 1.2)

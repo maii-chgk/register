@@ -41,3 +41,4 @@ yarn-debug.log*
 
 .idea
 .DS_Store
+config/honeybadger.yml
