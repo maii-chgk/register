@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
       email: permitted[:email],
       name: permitted["name-lat"],
       cyrillic_name: permitted[:name],
-      verified: false,
+      accepted: false,
       newsletter: subscribe_to_newsletter?
     ).save
   end

@@ -7,7 +7,7 @@ class Person < ApplicationRecord
   has_paper_trail
 
   rails_admin do
-    include_fields :name, :cyrillic_name, :email, :verified, :newsletter, :start_date, :end_date
+    include_fields :name, :cyrillic_name, :email, :accepted, :newsletter, :start_date, :end_date
     exclude_fields :created_at, :updated_at, :id
 
     label "Человек"
@@ -29,8 +29,8 @@ class Person < ApplicationRecord
       label "Дата выхода"
     end
 
-    configure :verified do
-      label "Верификация"
+    configure :accepted do
+      label "Принят(а)"
     end
 
     configure :newsletter do
@@ -41,7 +41,7 @@ class Person < ApplicationRecord
   private
 
   def maybe_change_membership
-    return unless saved_change_to_verified?
+    return unless saved_change_to_accepted?
 
     if active?
       set_discourse_role
@@ -52,7 +52,7 @@ class Person < ApplicationRecord
   end
 
   def active?
-    verified && (end_date.blank? || end_date.after?(Date.today))
+    accepted && (end_date.blank? || end_date.after?(Date.today))
   end
 
   def set_discourse_role
