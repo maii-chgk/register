@@ -1,13 +1,13 @@
 class Assembly < ApplicationRecord
-  has_and_belongs_to_many :people, -> { distinct }
+  belongs_to :person, -> { distinct }
 
   has_paper_trail
 
   rails_admin do
     exclude_fields :created_at, :updated_at, :id
 
-    label "Собрание"
-    label_plural "Собрания"
+    label "Участие в ОС"
+    label_plural "Участия в ОС"
 
     configure :date do
       label "Дата"

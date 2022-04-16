@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_14_181416) do
+ActiveRecord::Schema.define(version: 2022_04_16_182016) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -32,26 +32,12 @@ ActiveRecord::Schema.define(version: 2021_12_14_181416) do
     t.index ["person_id"], name: "index_assemblies_on_person_id"
   end
 
-  create_table "assemblies_people", id: false, force: :cascade do |t|
-    t.integer "assembly_id", null: false
-    t.integer "person_id", null: false
-    t.index ["assembly_id"], name: "index_assemblies_people_on_assembly_id"
-    t.index ["person_id"], name: "index_assemblies_people_on_person_id"
-  end
-
   create_table "payments", force: :cascade do |t|
     t.date "date"
     t.integer "person_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["person_id"], name: "index_payments_on_person_id"
-  end
-
-  create_table "payments_people", id: false, force: :cascade do |t|
-    t.integer "payment_id", null: false
-    t.integer "person_id", null: false
-    t.index ["payment_id"], name: "index_payments_people_on_payment_id"
-    t.index ["person_id"], name: "index_payments_people_on_person_id"
   end
 
   create_table "people", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class Person < ApplicationRecord
-  has_and_belongs_to_many :assemblies, Proc.new { distinct }
+  has_many :assemblies
 
   after_update :maybe_change_membership
   after_destroy :unset_discourse_role
