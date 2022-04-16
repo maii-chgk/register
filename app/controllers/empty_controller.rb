@@ -1,6 +1,7 @@
 class EmptyController < ApplicationController
   def index
-    render inline: "Hello"
+    count = Person.where(accepted: true).count
+    render inline: "В МАИИ #{count} членов."
   end
 end
 
