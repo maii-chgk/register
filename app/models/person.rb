@@ -45,6 +45,14 @@ class Person < ApplicationRecord
       .count
   end
 
+  def self.count_toward_quorum
+    Person.all.filter(&:counts_toward_quorum?).size
+  end
+
+  def counts_toward_quorum?
+    active? && !missed_three_assemblies
+  end
+
   private
 
   def maybe_change_membership
@@ -60,6 +68,19 @@ class Person < ApplicationRecord
 
   def active?
     accepted && (end_date.blank? || end_date.after?(Date.today))
+  end
+
+  def missed_three_assemblies
+    could_attend = Assembly
+                     .where(["date >= ?", start_date])
+                     .select(:date).distinct
+    return false if could_attend.size < 3
+
+    attended = Assembly
+                 .three_most_recent
+                 .where(["date >= ?", start_date])
+                 .where(person_id: id)
+    attended.size.zero?
   end
 
   def set_discourse_role

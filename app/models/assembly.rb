@@ -1,6 +1,8 @@
 class Assembly < ApplicationRecord
   belongs_to :person, -> { distinct }
 
+  scope :three_most_recent, -> { where("date in (select distinct date from assemblies order by date desc limit 3)") }
+
   has_paper_trail
 
   rails_admin do
