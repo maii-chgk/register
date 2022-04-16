@@ -38,6 +38,13 @@ class Person < ApplicationRecord
     end
   end
 
+  def self.members_count
+    Person
+      .where(accepted: true)
+      .where("end_date is null or end_date > current_date")
+      .count
+  end
+
   private
 
   def maybe_change_membership
