@@ -9,7 +9,7 @@ task :backup => :environment do
 
   system "sqlite3 #{db_name} \".backup #{backup_name}\""
 
-  s3.put_object(bucket: "maii-register-backup", key: "#{backup_name}")
+  s3.put_object(bucket: "maii-register-backup", key: "#{backup_name}", body: IO.read(backup_name))
 
   system "rm #{backup_name}"
 end
