@@ -29,8 +29,7 @@ module Discourse
 
         query = <<~SQL
           with poll_dates as (
-              select p.id, min(poll_votes.created_at) as poll_start,
-                     max(poll_votes.created_at) as poll_finish
+              select p.id, min(poll_votes.created_at) as poll_start
               from polls p
               join poll_votes on p.id = poll_votes.poll_id
               #{group_filter}
@@ -41,11 +40,10 @@ module Discourse
           from poll_dates pd
           join poll_votes on pd.id = poll_votes.poll_id
           join user_emails ue on poll_votes.user_id = ue.user_id
-          where poll_start >= $1 and poll_finish < $2
+          where date_trunc('day', poll_start) = $1
         SQL
 
-        next_day = Date.parse(day) + 1
-        execute(query, [day, next_day]).to_a
+        execute(query, [day]).to_a
       end
 
       def add_to_group(email, group_name)
