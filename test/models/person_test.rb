@@ -18,6 +18,29 @@ class PersonTest < ActiveSupport::TestCase
     assert_not people(:palamedes).active?
   end
 
+  test "accepted without an end date are active on dates after their start date" do
+    assert people(:gideon).active_on?(Date.new(2050, 1, 1))
+    assert people(:gideon).active_on?(Date.new(2022, 1, 1))
+  end
+
+  test "accepted are not active on dates before their start date" do
+    assert_not people(:gideon).active_on?(Date.new(2010, 1, 1))
+  end
+
+  test "not accepted are not active for any date" do
+    assert_not people(:pyrrha).active_on?(Date.new(2010, 1, 1))
+    assert_not people(:pyrrha).active_on?(Date.new(2022, 1, 1))
+    assert_not people(:pyrrha).active_on?(Date.new(2052, 1, 1))
+  end
+
+  test "accepted with an end date are active before that date" do
+    assert people(:camilla).active_on?(Date.new(2052, 1, 1))
+  end
+
+  test "accepted with an end date are inactive after that date" do
+    assert_not people(:camilla).active_on?(Date.new(2100, 1, 1))
+  end
+
   test "active with three assemblies count towards quorum" do
     assert people(:harrow).counts_toward_quorum?
   end

@@ -54,7 +54,11 @@ class Person < ApplicationRecord
   end
 
   def active?
-    accepted && (end_date.blank? || end_date.after?(Date.today))
+    active_on?(Date.today)
+  end
+
+  def active_on?(date)
+    (end_date.blank? || end_date.after?(date)) && !(start_date.blank? || date.before?(start_date))
   end
 
   private
