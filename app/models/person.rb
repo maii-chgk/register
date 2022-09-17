@@ -53,6 +53,10 @@ class Person < ApplicationRecord
     active? && !missed_three_assemblies
   end
 
+  def active?
+    accepted && (end_date.blank? || end_date.after?(Date.today))
+  end
+
   private
 
   def maybe_change_membership
@@ -64,10 +68,6 @@ class Person < ApplicationRecord
     else
       unset_discourse_role
     end
-  end
-
-  def active?
-    accepted && (end_date.blank? || end_date.after?(Date.today))
   end
 
   def missed_three_assemblies

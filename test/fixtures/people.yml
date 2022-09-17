@@ -1,0 +1,26 @@
+gideon:
+  email: gideon@example.com
+  name: gideon
+  start_date: 2021-04-09
+  accepted: true
+harrow:
+  email: harrow@example.com
+  name: harrow
+  start_date: 2021-04-09
+  accepted: true
+camilla:
+  email: camilla@example.com
+  name: camilla
+  start_date: 2022-01-01
+  end_date: 2099-01-01
+  accepted: true
+palamedes:
+  email: palamedes@example.com
+  name: palamedes
+  start_date: 2021-04-09
+  end_date: 2022-02-01
+  accepted: true
+pyrrha:
+  email: pyrrha@example.com
+  name: pyrrha
+  accepted: false
