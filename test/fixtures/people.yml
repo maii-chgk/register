@@ -18,7 +18,7 @@ palamedes:
   email: palamedes@example.com
   name: palamedes
   start_date: 2021-04-09
-  end_date: 2022-02-01
+  end_date: 2022-06-01
   accepted: true
 pyrrha:
   email: pyrrha@example.com
