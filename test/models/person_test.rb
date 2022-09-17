@@ -17,4 +17,21 @@ class PersonTest < ActiveSupport::TestCase
   test "accepted with an end date in the past are not active" do
     assert_not people(:palamedes).active?
   end
+
+  test "active with three assemblies count towards quorum" do
+    assert people(:harrow).counts_toward_quorum?
+  end
+
+  test "active with three missed assemblies don’t count towards quorum" do
+    assert_not people(:gideon).counts_toward_quorum?
+  end
+
+  test "active who didn’t have a chance to miss three assemblies count towards quorum" do
+    assert people(:camilla).counts_toward_quorum?
+  end
+
+  test "inactive don’t count towards quorum" do
+    assert_not people(:pyrrha).counts_toward_quorum?
+    assert_not people(:palamedes).counts_toward_quorum?
+  end
 end
