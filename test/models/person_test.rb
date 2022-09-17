@@ -34,4 +34,12 @@ class PersonTest < ActiveSupport::TestCase
     assert_not people(:pyrrha).counts_toward_quorum?
     assert_not people(:palamedes).counts_toward_quorum?
   end
+
+  test "quorum is counted correctly" do
+    assert Person.count_toward_quorum, 1
+  end
+
+  test "members count is correct" do
+    assert Person.members_count, 3
+  end
 end
