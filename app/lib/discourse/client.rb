@@ -17,10 +17,10 @@ module Discourse
           where groups.name = $1
         SQL
 
-        execute(query, group_name).to_a
+        execute_with_params(query, group_name).to_a
       end
 
-      def list_voters(day, group_name: MAIN_GROUP)
+      def get_votes(group_name: MAIN_GROUP)
         group_filter = if group_name.nil?
                          ""
                        else
@@ -36,14 +36,13 @@ module Discourse
               group by p.id
           )
           
-          select distinct ue.email
+          select distinct ue.email, pd.poll_start::date as date
           from poll_dates pd
           join poll_votes on pd.id = poll_votes.poll_id
           join user_emails ue on poll_votes.user_id = ue.user_id
-          where date_trunc('day', poll_start) = $1
         SQL
 
-        execute(query, [day]).to_a
+        execute(query).to_a
       end
 
       def add_to_group(email, group_name)
@@ -58,7 +57,7 @@ module Discourse
           values ($1, $2, now(), now())
         SQL
 
-        execute(query, [group_id, user_id])
+        execute_with_params(query, [group_id, user_id])
       rescue PG::UniqueViolation
         # Already added to the group
       end
@@ -76,7 +75,7 @@ module Discourse
               and group_id = $2;
         SQL
 
-        execute(query, [group_id, user_id])
+        execute_with_params(query, [group_id, user_id])
       end
 
       def fetch_group_id(group_name)
@@ -86,7 +85,7 @@ module Discourse
           where groups.name = $1;
         SQL
 
-        execute(query, group_name).getvalue(0, 0)
+        execute_with_params(query, group_name).getvalue(0, 0)
       rescue ArgumentError
         nil
       end
@@ -98,12 +97,18 @@ module Discourse
           where email = $1
         SQL
 
-        execute(query, email).getvalue(0, 0)
+        execute_with_params(query, email).getvalue(0, 0)
       rescue ArgumentError
         nil
       end
 
-      def execute(query, params)
+      def execute(query)
+        ConnectionManager.connection_pool.with do |connection|
+          connection.exec(query)
+        end
+      end
+
+      def execute_with_params(query, params)
         params = [params] unless params.kind_of?(Array)
 
         ConnectionManager.connection_pool.with do |connection|
