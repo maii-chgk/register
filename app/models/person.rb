@@ -101,7 +101,10 @@ class Person < ApplicationRecord
   end
 
   def had_electronic_vote_between?(first_date, second_date)
-    Vote.where(["date between ? and ?", first_date, second_date]).electronic.size > 0
+    Vote.where(["date between ? and ?", first_date, second_date])
+      .where(person_id: id)
+      .electronic
+      .size > 0
   end
 
   def maybe_change_membership
