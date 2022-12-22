@@ -15,7 +15,7 @@ class Vote < ApplicationRecord
                              "2022-01-05",
                              "2022-08-04", "2022-08-21", "2022-08-22", "2022-08-23",
                              "2022-09-04"]
-  ASSEMBLIES_DATES = ["2021-05-29", "2021-07-03", "2022-04-30", "2022-08-28"]
+  ASSEMBLIES_DATES = ["2021-05-29", "2021-07-03", "2022-04-30", "2022-08-28", "2022-12-18"]
 
   def self.assemblies_between(first_date, second_date)
     Vote.where(["date between ? and ?", first_date, second_date])
