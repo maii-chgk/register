@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_17_145836) do
+ActiveRecord::Schema.define(version: 2023_01_21_143852) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -24,12 +24,12 @@ ActiveRecord::Schema.define(version: 2022_09_17_145836) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
-  create_table "assemblies", force: :cascade do |t|
+  create_table "assembly_participations", force: :cascade do |t|
     t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "person_id", null: false
-    t.index ["person_id"], name: "index_assemblies_on_person_id"
+    t.index ["person_id"], name: "index_assembly_participations_on_person_id"
   end
 
   create_table "payments", force: :cascade do |t|
@@ -75,5 +75,5 @@ ActiveRecord::Schema.define(version: 2022_09_17_145836) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "assemblies", "people"
+  add_foreign_key "assembly_participations", "people"
 end

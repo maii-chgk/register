@@ -1,7 +1,7 @@
-class Assembly < ApplicationRecord
+class AssemblyParticipation < ApplicationRecord
   belongs_to :person, -> { distinct }
 
-  scope :three_most_recent, -> { where("date in (select distinct date from assemblies order by date desc limit 3)") }
+  scope :three_most_recent, -> { where("date in (select distinct date from assembly_participations order by date desc limit 3)") }
 
   has_paper_trail
 
