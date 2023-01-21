@@ -82,8 +82,8 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    bootsnap (1.7.5)
-      msgpack (~> 1.0)
+    bootsnap (1.15.0)
+      msgpack (~> 1.2)
     builder (3.2.4)
     byebug (11.1.3)
     concurrent-ruby (1.1.10)
@@ -143,7 +143,7 @@ GEM
     minitest-rails (6.1.0)
       minitest (~> 5.10)
       railties (~> 6.1.0)
-    msgpack (1.4.2)
+    msgpack (1.6.0)
     nested_form (0.3.2)
     net-imap (0.3.4)
       date
@@ -279,7 +279,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-s3 (~> 1.96.1)
-  bootsnap (>= 1.4.4)
+  bootsnap (>= 1.15)
   byebug
   connection_pool
   devise (~> 4.8.0)

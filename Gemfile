@@ -9,7 +9,7 @@ gem 'puma', '~> 5.0'
 gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 5.0'
 gem 'turbolinks', '~> 5'
-gem 'bootsnap', '>= 1.4.4', require: false
+gem 'bootsnap', '>= 1.15', require: false
 
 gem 'rails_admin', '~> 2.2.1'
 gem 'devise', '~> 4.8.0'
