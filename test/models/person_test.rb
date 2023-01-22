@@ -74,9 +74,11 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   test "quorum is counted correctly in the past" do
-    assert_equal Person.count_toward_quorum_on(Date.new(2021, 05, 01)), 3
-    assert_equal Person.count_toward_quorum_on(Date.new(2022, 01, 01)), 4
-    assert_equal Person.count_toward_quorum_on(Date.new(2022, 05, 01)), 2
+    assert_equal Person.count_toward_quorum_on(Date.new(2021, 5, 1)), 3
+    assert_equal Person.count_toward_quorum_on(Date.new(2022, 1, 1)), 3
+    assert_equal Person.count_toward_quorum_on(Date.new(2022, 5, 1)), 1
+    assert_equal Person.count_toward_quorum_on(Date.new(2022, 6, 1)), 1
+    assert_equal Person.count_toward_quorum_on(Date.new(2022, 8, 1)), 3
   end
 
   test "members count is correct" do

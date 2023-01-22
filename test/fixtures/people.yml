@@ -11,7 +11,7 @@ harrow:
 camilla:
   email: camilla@example.com
   name: camilla
-  start_date: 2022-01-01
+  start_date: 2022-08-01
   end_date: 2099-01-01
   accepted: true
 palamedes:

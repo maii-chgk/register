@@ -9,3 +9,11 @@ second_harrow:
 third_harrow:
   assembly: three
   person: harrow
+
+fourth_harrow:
+  assembly: four
+  person: harrow
+
+fifth_harrow:
+  assembly: five
+  person: harrow
