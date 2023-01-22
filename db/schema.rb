@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_21_143852) do
+ActiveRecord::Schema.define(version: 2023_01_22_213120) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -24,11 +24,18 @@ ActiveRecord::Schema.define(version: 2023_01_21_143852) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "assemblies", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "assembly_participations", force: :cascade do |t|
-    t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "person_id", null: false
+    t.integer "assembly_id"
     t.index ["person_id"], name: "index_assembly_participations_on_person_id"
   end
 
@@ -70,10 +77,24 @@ ActiveRecord::Schema.define(version: 2023_01_21_143852) do
   create_table "votes", force: :cascade do |t|
     t.datetime "date"
     t.integer "person_id"
-    t.integer "kind"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "assembly_id"
+    t.integer "voting_session_id"
+    t.integer "poll_id"
+    t.index ["assembly_id"], name: "index_votes_on_assembly_id"
+    t.index ["voting_session_id"], name: "index_votes_on_voting_session_id"
+  end
+
+  create_table "voting_sessions", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "assembly_participations", "assemblies"
   add_foreign_key "assembly_participations", "people"
+  add_foreign_key "votes", "assemblies"
+  add_foreign_key "votes", "voting_sessions"
 end

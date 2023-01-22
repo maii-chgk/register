@@ -36,7 +36,7 @@ module Discourse
               group by p.id
           )
           
-          select distinct ue.email, pd.poll_start::date as date
+          select distinct ue.email, pd.poll_start::date as date, pd.id
           from poll_dates pd
           join poll_votes on pd.id = poll_votes.poll_id
           join user_emails ue on poll_votes.user_id = ue.user_id

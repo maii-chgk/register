@@ -1,34 +1,32 @@
 first_assembly_harrow:
   date: 2021-05-29
+  assembly: one
   person: harrow
-  kind: assembly
 
 second_assembly_harrow:
   date: 2021-07-03
+  assembly: two
   person: harrow
-  kind: assembly
 
 third_assembly_harrow:
   date: 2022-04-30
+  assembly: three
   person: harrow
-  kind: assembly
 
 first_electronic_harrow:
   date: 2022-06-30
+  voting_session: one
   person: harrow
-  kind: assembly
 
 first_electronic_gideon:
   date: 2022-06-30
+  voting_session: one
   person: gideon
-  kind: electronic
 
 random_camilla:
   date: 2022-01-30
   person: camilla
-  kind: random
 
 random_pyrrha:
   date: 2022-01-01
   person: pyrrha
-  kind: random

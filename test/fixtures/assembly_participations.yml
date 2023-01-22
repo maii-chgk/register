@@ -1,11 +1,11 @@
 first_harrow:
-  date: 2021-05-29
+  assembly: one
   person: harrow
 
 second_harrow:
-  date: 2021-07-03
+  assembly: two
   person: harrow
 
 third_harrow:
-  date: 2022-04-30
+  assembly: three
   person: harrow

@@ -54,7 +54,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_not people(:gideon).counts_toward_quorum_on?(Date.new(2022, 06, 15))
   end
 
-  test "palamedes" do
+  test "palamedes in quorum" do
     assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 01, 01))
     assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 04, 01))
     assert_not people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 05, 01))
