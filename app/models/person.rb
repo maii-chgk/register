@@ -1,6 +1,4 @@
 class Person < ApplicationRecord
-  has_many :assembly_participations
-
   after_update :maybe_change_membership
   after_destroy :unset_discourse_role
 
