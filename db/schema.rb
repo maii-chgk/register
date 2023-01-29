@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_17_145836) do
+ActiveRecord::Schema.define(version: 2023_01_29_180048) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -25,11 +25,10 @@ ActiveRecord::Schema.define(version: 2022_09_17_145836) do
   end
 
   create_table "assemblies", force: :cascade do |t|
-    t.date "date"
+    t.date "start_date"
+    t.date "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "person_id", null: false
-    t.index ["person_id"], name: "index_assemblies_on_person_id"
   end
 
   create_table "payments", force: :cascade do |t|
@@ -70,10 +69,22 @@ ActiveRecord::Schema.define(version: 2022_09_17_145836) do
   create_table "votes", force: :cascade do |t|
     t.datetime "date"
     t.integer "person_id"
-    t.integer "kind"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "assembly_id"
+    t.integer "voting_session_id"
+    t.integer "poll_id"
+    t.index ["assembly_id"], name: "index_votes_on_assembly_id"
+    t.index ["voting_session_id"], name: "index_votes_on_voting_session_id"
+  end
+
+  create_table "voting_sessions", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "assemblies", "people"
+  add_foreign_key "votes", "assemblies"
+  add_foreign_key "votes", "voting_sessions"
 end

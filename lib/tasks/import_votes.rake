@@ -5,20 +5,20 @@ task :import_votes => :environment do
   votes = Discourse::Client.get_votes
 
   votes.each do |vote|
-    email, date = vote['email'], vote['date']
+    email, date, poll_id = vote['email'], vote['date'], vote['poll_id']
     person = Person.find_by(email: email)
     if person.nil?
       puts "person with email #{email} missing"
       next
     end
 
-    kind = if Vote::ASSEMBLIES_DATES.include?(date)
-             :assembly
-           elsif Vote::ELECTRONIC_VOTING_DATES.include?(date)
-            :electronic
-           else
-             :random
-           end
-    Vote.find_or_create_by(date: date, person: person, kind: kind)
+    assembly = Assembly.for_date(date)
+    voting_session = VotingSession.for_date(date)
+
+    Vote.create_or_find_by(date: date,
+                           person: person,
+                           poll_id: poll_id,
+                           assembly: assembly,
+                           voting_session: voting_session)
   end
 end
