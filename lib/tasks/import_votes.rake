@@ -15,8 +15,10 @@ task :import_votes => :environment do
     assembly = Assembly.for_date(date)
     voting_session = VotingSession.for_date(date)
 
-    Vote.find_or_create_by(date: date, person: person,
+    Vote.create_or_find_by(date: date,
+                           person: person,
                            poll_id: poll_id,
-                           assembly: assembly, voting_session: voting_session)
+                           assembly: assembly,
+                           voting_session: voting_session)
   end
 end

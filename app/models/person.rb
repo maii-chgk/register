@@ -79,11 +79,11 @@ class Person < ApplicationRecord
 
   def fetch_participations(date)
     query = <<~SQL
-      select a.start_date as date, ap.id
+      select distinct a.start_date as date, v.assembly_id
       from assemblies a 
-      left join assembly_participations ap 
-        on a.id = ap.assembly_id 
-      where a.start_date <= $1 and ap.person_id = $2 
+      left join votes v
+        on a.id = v.assembly_id 
+      where a.start_date <= $1 and v.person_id = $2 and v.assembly_id is not null
       order by a.start_date
     SQL
 
