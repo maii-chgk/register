@@ -4,8 +4,8 @@ task :backup => :environment do
                                      Rails.application.credentials.dig(:aws, :secret_access_key))
   s3 = Aws::S3::Client.new(region: 'eu-central-1', credentials: credentials)
 
-  db_name = "db/production.sqlite3"
-  backup_name = "db/#{Date.today}_backup.sqlite3"
+  db_name = "/db/production_db.sqlite3"
+  backup_name = "/db/#{Date.today}_backup.sqlite3"
 
   system "sqlite3 #{db_name} \".backup #{backup_name}\""
 

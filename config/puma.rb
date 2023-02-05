@@ -4,12 +4,6 @@ threads min_threads_count, max_threads_count
 
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
-if ENV.fetch("RAILS_ENV") == "production"
-  bind "unix:///home/deploy/puma.sock"
-else
-  port ENV.fetch("PORT") { 3000 }
-end
-
 environment ENV.fetch("RAILS_ENV") { "development" }
 
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
