@@ -59,7 +59,7 @@ FROM base
 COPY --from=build /rails /rails
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y libpq-dev
+    apt-get install --no-install-recommends -y libpq-dev sqlite3
 
 # Deployment options
 ENV RAILS_LOG_TO_STDOUT="1" \
