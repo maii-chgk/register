@@ -3,11 +3,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.5'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 6.1', '>= 6.1.7.1'
 gem 'sqlite3', '~> 1.6'
 gem 'puma', '~> 5.0'
-gem 'sass-rails', '>= 6'
-gem 'webpacker', '~> 5.0'
+gem 'sass-rails', '>= 6.0.0'
+gem 'webpacker', '~> 5.4', '>= 5.4.0'
 gem 'turbolinks', '~> 5'
 gem 'bootsnap', '>= 1.15', require: false
 
@@ -26,7 +26,7 @@ end
 
 group :development do
   gem 'web-console', '>= 4.1.0'
-  gem 'rack-mini-profiler', '~> 2.0'
+  gem 'rack-mini-profiler', '~> 2.3', '>= 2.3.2'
   gem 'listen', '~> 3.3'
   gem 'spring'
 end
