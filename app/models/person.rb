@@ -85,7 +85,7 @@ class Person < ApplicationRecord
       order by a.start_date
     SQL
 
-    ActiveRecord::Base.connection.exec_query(query, "", [[nil, date], [nil, id]]).to_a
+    ActiveRecord::Base.connection.exec_query(query, "", [date, id]).to_a
   end
 
   def active?
