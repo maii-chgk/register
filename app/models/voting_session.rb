@@ -1,4 +1,7 @@
 class VotingSession < ApplicationRecord
+  has_paper_trail
+  has_many :votes
+
   def self.for_date(date)
     VotingSession.where("start_date <= ? and end_date >= ?", date, date).first
   end

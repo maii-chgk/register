@@ -1,4 +1,5 @@
 class Assembly < ApplicationRecord
+  has_paper_trail
   has_many :votes
 
   def self.for_date(date)
