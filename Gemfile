@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 7.0.0'
 gem 'sqlite3', '~> 1.6'
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 6.0'
 gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 5.0'
 gem 'turbolinks', '~> 5'
@@ -13,7 +13,7 @@ gem 'devise', '~> 4.8.0'
 gem 'paper_trail', '~> 14.0.0'
 gem 'pg', '~> 1.4'
 gem 'connection_pool'
-gem 'aws-sdk-s3', '~> 1.96.1'
+gem 'aws-sdk-s3', '~> 1.96'
 gem "honeybadger", "~> 4.0"
 
 group :development, :test do
