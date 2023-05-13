@@ -11,7 +11,7 @@ gem 'webpacker', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'bootsnap', '>= 1.15', require: false
 
-gem 'rails_admin', '~> 3.1'
+gem 'rails_admin', '~> 3.1', '>= 3.1.2'
 gem 'devise', '~> 4.8.0'
 gem 'paper_trail', '~> 12.0.0'
 gem 'pg', '~> 1.4'
