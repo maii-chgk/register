@@ -64,9 +64,9 @@ class Person < ApplicationRecord
 
     assemblies_that_could_attend = Assembly
                                      .where("start_date >= ?", start_date)
-                                     .where("start_date <= ?", date)
-                                     .order(:start_date)
-                                     .pluck(:start_date)
+                                     .where("end_date < ?", date)
+                                     .order(:end_date)
+                                     .pluck(:end_date)
     return true if assemblies_that_could_attend.size < MISSED_ASSEMBLIES_LIMIT
 
     participations = fetch_participations(date)
@@ -121,7 +121,7 @@ class Person < ApplicationRecord
   def had_electronic_vote_between?(first_date, second_date)
     Vote.where(["date between ? and ?", first_date, second_date])
       .where(person_id: id)
-      .where.not(voting_session_id: nil)
+      .where("voting_session_id is not null or assembly_id is not null")
       .size > 0
   end
 
