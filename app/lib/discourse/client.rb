@@ -113,7 +113,7 @@ module Discourse
 
         ConnectionManager.connection_pool.with do |connection|
           connection.exec_params(query, params)
-        rescue PG::UnableToSend
+        rescue PG::UnableToSend, PG::ConnectionBad
           Rails.logger.warn("Reloading connection pool")
           ConnectionManager.connection_pool.reload
           Rails.logger.warn("Reloaded connection pool")
