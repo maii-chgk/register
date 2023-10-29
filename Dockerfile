@@ -62,8 +62,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y libpq-dev sqlite3
 
 # Deployment options
-ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true"
+ENV RAILS_LOG_TO_STDOUT="1"
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
