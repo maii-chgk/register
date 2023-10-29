@@ -14,7 +14,7 @@ gem 'paper_trail', '~> 15.1.0'
 gem 'pg', '~> 1.4'
 gem 'connection_pool'
 gem 'aws-sdk-s3', '~> 1.96'
-gem "honeybadger", "~> 4.0"
+gem "honeybadger", "~> 5.0"
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
