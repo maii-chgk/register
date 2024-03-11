@@ -26,5 +26,3 @@ group :development do
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'listen', '~> 3.3'
 end
-
-gem "dockerfile-rails", ">= 1.0.0", :group => :development

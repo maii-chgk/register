@@ -113,8 +113,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    dockerfile-rails (1.4.1)
-      rails
     drb (2.2.1)
     erubi (1.12.0)
     ffi (1.15.5)
@@ -309,7 +307,6 @@ DEPENDENCIES
   byebug
   connection_pool
   devise (~> 4.9.0)
-  dockerfile-rails (>= 1.0.0)
   honeybadger (~> 5.0)
   listen (~> 3.3)
   minitest-rails
