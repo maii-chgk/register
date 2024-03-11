@@ -59,7 +59,9 @@ FROM base
 COPY --from=build /rails /rails
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y libpq-dev sqlite3
+    apt-get install --no-install-recommends -y libpq-dev sqlite3 libjemalloc2
+
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 # Deployment options
 ENV RAILS_LOG_TO_STDOUT="1"
