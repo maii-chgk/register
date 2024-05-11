@@ -42,3 +42,6 @@ yarn-debug.log*
 .idea
 .DS_Store
 config/honeybadger.yml
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -4,10 +4,9 @@ gem "rails", "~> 7.1.0"
 gem "sqlite3", "~> 1.6"
 gem "puma", "~> 6.0"
 gem "sass-rails", ">= 6"
-gem "webpacker", "~> 5.0"
 gem "turbolinks", "~> 5"
 gem "bootsnap", ">= 1.15", require: false
-
+gem "jsbundling-rails"
 gem "rails_admin", "~> 3.1"
 gem "devise", "~> 4.9.0"
 gem "paper_trail", "~> 15.1.0"
