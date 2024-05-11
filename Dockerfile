@@ -22,21 +22,18 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl node-gyp pkg-config python-is-python3 unzip libpq-dev
 
 # Install JavaScript dependencies
-ARG NODE_VERSION=19.5.0
-ARG YARN_VERSION=1.22.19
-RUN curl -fsSL https://fnm.vercel.app/install | bash && \
-    /root/.local/share/fnm/fnm install $NODE_VERSION
-ENV PATH=/root/.local/share/fnm/aliases/default/bin/:$PATH
-RUN npm install -g yarn@$YARN_VERSION
+ENV BUN_INSTALL=/usr/local/bun
+ENV PATH=/usr/local/bun/bin:$PATH
+ARG BUN_VERSION=1.1.8
+RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle install
 
 # Install node modules
-COPY package.json yarn.lock .
-RUN yarn install
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
 # Copy application code
 COPY . .

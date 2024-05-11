@@ -12,10 +12,6 @@
   },
   "version": "0.1.0",
   "devDependencies": {},
-  "packageManager": "yarn@1.22.19",
-  "resolutions": {
-    "rails_admin/@fortawesome/fontawesome-free": "^6.5.2"
-  },
   "scripts": {
     "build": "webpack --config ./config/webpack/webpack.config.js"
   }
