@@ -12,11 +12,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="vendor/bundle" \
     BUNDLE_WITHOUT="development:test"
 
-# Update gems and preinstall the desired version of bundler
-ARG BUNDLER_VERSION=2.4.13
-RUN gem update --system --no-document && \
-    gem install -N bundler -v ${BUNDLER_VERSION}
-
+RUN gem update --system --no-document
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
@@ -35,7 +31,7 @@ RUN npm install -g yarn@$YARN_VERSION
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle _${BUNDLER_VERSION}_ install && \
+RUN bundle install && \
     bundle exec bootsnap precompile --gemfile
 
 # Install node modules
