@@ -15,4 +15,4 @@ jobs:
       - name: Run tests
         run: bin/rails test
       - name: Run linter
-        run: rake standard
+        run: bin/rake standard
