@@ -18,6 +18,7 @@ gem "honeybadger"
 
 group :development, :test do
   gem "minitest-rails"
+  gem "standard"
 end
 
 group :development do
