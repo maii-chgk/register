@@ -1,12 +1,11 @@
-require 'date'
-require_relative '../connection_manager'
+require "date"
+require_relative "../connection_manager"
 
 module Discourse
   class Client
     MAIN_GROUP = "organization_members"
 
     class << self
-
       def list_group_members(group_name: MAIN_GROUP)
         query = <<~SQL
           select users.name, ue.email
@@ -22,10 +21,10 @@ module Discourse
 
       def get_votes(group_name: MAIN_GROUP)
         group_filter = if group_name.nil?
-                         ""
-                       else
-                         "where p.groups = '#{group_name}'"
-                       end
+          ""
+        else
+          "where p.groups = '#{group_name}'"
+        end
 
         query = <<~SQL
           with poll_dates as (
@@ -109,7 +108,7 @@ module Discourse
       end
 
       def execute_with_params(query, params)
-        params = [params] unless params.kind_of?(Array)
+        params = [params] unless params.is_a?(Array)
 
         ConnectionManager.connection_pool.with do |connection|
           connection.exec_params(query, params)

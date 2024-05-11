@@ -47,17 +47,17 @@ class PersonTest < ActiveSupport::TestCase
 
   test "active with three missed assemblies count towards quorum after an electronic vote" do
     assert people(:gideon).counts_toward_quorum?
-    assert people(:gideon).counts_toward_quorum_on?(Date.new(2022, 07, 15))
+    assert people(:gideon).counts_toward_quorum_on?(Date.new(2022, 0o7, 15))
   end
 
   test "active with three missed assemblies don’t count towards quorum before an electronic vote" do
-    assert_not people(:gideon).counts_toward_quorum_on?(Date.new(2022, 06, 15))
+    assert_not people(:gideon).counts_toward_quorum_on?(Date.new(2022, 0o6, 15))
   end
 
   test "palamedes in quorum" do
-    assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 01, 01))
-    assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 04, 01))
-    assert_not people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 05, 01))
+    assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 0o1, 0o1))
+    assert people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 0o4, 0o1))
+    assert_not people(:palamedes).counts_toward_quorum_on?(Date.new(2022, 0o5, 0o1))
   end
 
   test "active who didn’t have a chance to miss three assemblies count towards quorum" do

@@ -24,6 +24,5 @@ class ConnectionManager
         end
       end
     end
-
   end
 end

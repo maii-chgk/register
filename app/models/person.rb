@@ -63,10 +63,10 @@ class Person < ApplicationRecord
     return false unless active_on?(date)
 
     assemblies_that_could_attend = Assembly
-                                     .where("start_date >= ?", start_date)
-                                     .where("end_date < ?", date)
-                                     .order(:end_date)
-                                     .pluck(:end_date)
+      .where("start_date >= ?", start_date)
+      .where("end_date < ?", date)
+      .order(:end_date)
+      .pluck(:end_date)
     return true if assemblies_that_could_attend.size < MISSED_ASSEMBLIES_LIMIT
 
     participations = fetch_participations(date)

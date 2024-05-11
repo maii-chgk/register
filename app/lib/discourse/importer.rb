@@ -1,4 +1,4 @@
-require_relative "./client"
+require_relative "client"
 
 module Discourse
   class Importer
@@ -12,6 +12,5 @@ module Discourse
         end
       end
     end
-
   end
 end

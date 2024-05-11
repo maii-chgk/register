@@ -8,8 +8,8 @@ class BackupJob < ApplicationJob
   def perform(*args)
     Rails.logger.info "Loading credentials..."
     credentials = Aws::Credentials.new(Rails.application.credentials.dig(:aws, :access_key_id),
-                                       Rails.application.credentials.dig(:aws, :secret_access_key))
-    s3 = Aws::S3::Client.new(region: 'eu-central-1', credentials: credentials)
+      Rails.application.credentials.dig(:aws, :secret_access_key))
+    s3 = Aws::S3::Client.new(region: "eu-central-1", credentials: credentials)
 
     db_name = "/db/production_db.sqlite3"
     backup_name = "/db/#{Date.today}_backup.sqlite3"
