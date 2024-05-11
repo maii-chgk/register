@@ -13,6 +13,6 @@ jobs:
         with:
           bundler-cache: true
       - name: Run tests
-        run: rails test
+        run: bin/rails test
       - name: Run linter
         run: rake standard
