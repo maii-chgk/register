@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on: push
 
@@ -10,9 +10,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2
       - name: bundle install
         run: bundle install
       - name: Run tests
         run: rails test
+      - name: Run linter
+        run: rake standard
