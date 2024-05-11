@@ -22,7 +22,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl node-gyp pkg-config python-is-python3 unzip libpq-dev
 
 # Install JavaScript dependencies
-ARG NODE_VERSION=16.19.0
+ARG NODE_VERSION=19.5.0
 ARG YARN_VERSION=1.22.19
 RUN curl -fsSL https://fnm.vercel.app/install | bash && \
     /root/.local/share/fnm/fnm install $NODE_VERSION

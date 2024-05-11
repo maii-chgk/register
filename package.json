@@ -2,21 +2,21 @@
   "name": "register",
   "private": true,
   "dependencies": {
-    "@rails/actioncable": "^6.0.0",
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.4.0",
+    "@rails/actioncable": "^7.1.0",
+    "@rails/activestorage": "^7.1.0",
+    "@rails/ujs": "^7.1.0",
     "rails_admin": "3.1.2",
     "turbolinks": "^5.2.0",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   },
   "version": "0.1.0",
-  "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
-  },
+  "devDependencies": {},
   "packageManager": "yarn@1.22.19",
   "resolutions": {
-    "rails_admin/@fortawesome/fontawesome-free": "^5.15.0"
+    "rails_admin/@fortawesome/fontawesome-free": "^6.5.2"
+  },
+  "scripts": {
+    "build": "webpack --config ./config/webpack/webpack.config.js"
   }
 }
