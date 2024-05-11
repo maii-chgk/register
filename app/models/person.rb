@@ -51,8 +51,7 @@ class Person < ApplicationRecord
 
   def self.count_toward_quorum_on(date)
     Person.all
-      .filter { |person| person.counts_toward_quorum_on?(date) }
-      .size
+      .count { |person| person.counts_toward_quorum_on?(date) }
   end
 
   def counts_toward_quorum?

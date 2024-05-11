@@ -19,7 +19,7 @@ class BackupJob < ApplicationJob
     Rails.logger.info "Local backup created"
 
     Rails.logger.info "Uploading backup to S3..."
-    s3.put_object(bucket: "maii-register-backup", key: "#{backup_name}", body: IO.read(backup_name))
+    s3.put_object(bucket: "maii-register-backup", key: backup_name.to_s, body: IO.read(backup_name))
     Rails.logger.info "Backup uploaded"
 
     Rails.logger.info "Removing local backup file at #{backup_name}..."
