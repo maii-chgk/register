@@ -2,7 +2,7 @@ require "date"
 require_relative "../connection_manager"
 
 module Discourse
-  class Client
+  class DbClient
     MAIN_GROUP = "organization_members"
 
     class << self
