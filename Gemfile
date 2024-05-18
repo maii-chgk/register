@@ -14,6 +14,7 @@ gem "pg", "~> 1.4"
 gem "connection_pool"
 gem "aws-sdk-s3", "~> 1.96"
 gem "honeybadger"
+gem "discourse_api", "~> 2.0"
 
 group :development, :test do
   gem "minitest-rails"
