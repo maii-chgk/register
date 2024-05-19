@@ -12,13 +12,13 @@ module Discourse
     # Pagination in the users endpoint works using page numbers instead of offsets, so we don’t use `list_all`.
     def list_users
       page = 0
-      all_users = []
+      all_users = {}
 
       loop do
         users = @client.list_users("active", {page:, show_emails: true})
         break if users.empty?
 
-        all_users += users.map { |user| user.slice("name", "username", "email") }
+        users.each { |user| all_users[user["username"]] = user["email"] }
         page += 1
       end
 
@@ -26,7 +26,7 @@ module Discourse
     end
 
     def list_group_members(group_name)
-      list_all(:group_members, %w[name username], group_name)
+      list_all(:group_members, %w[name username id], group_name)
     end
 
     def list_main_group_members
