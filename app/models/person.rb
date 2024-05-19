@@ -135,10 +135,14 @@ class Person < ApplicationRecord
   end
 
   def set_discourse_role
-    Discourse::DBClient.add_to_group(email, Discourse::DBClient::MAIN_GROUP)
+    discourse_client.add_to_group(Discourse::Client::MAIN_GROUP, self)
   end
 
   def unset_discourse_role
-    Discourse::DBClient.remove_from_group(email, Discourse::DBClient::MAIN_GROUP)
+    discourse_client.remove_from_group(Discourse::Client::MAIN_GROUP, self)
+  end
+
+  def discourse_client
+    Discourse::Client.new
   end
 end

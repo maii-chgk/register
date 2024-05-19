@@ -19,6 +19,7 @@ gem "discourse_api", "~> 2.0"
 group :development, :test do
   gem "minitest-rails"
   gem "standard"
+  gem "mocha"
 end
 
 group :development do

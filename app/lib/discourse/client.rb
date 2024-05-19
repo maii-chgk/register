@@ -29,8 +29,14 @@ module Discourse
       list_all(:group_members, %w[name username id], group_name)
     end
 
-    def list_main_group_members
-      list_group_members(MAIN_GROUP)
+    def add_to_group(group_name, *people)
+      usernames = Array(people).flatten.map(&:discourse_username)
+      @client.group_add(group_name, usernames)
+    end
+
+    def remove_from_group(group_name, *people)
+      usernames = Array(people).flatten.map(&:discourse_username)
+      @client.group_remove(group_name, usernames)
     end
 
     private

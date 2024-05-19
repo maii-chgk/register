@@ -84,4 +84,12 @@ class PersonTest < ActiveSupport::TestCase
   test "members count is correct" do
     assert_equal Person.members_count, 3
   end
+
+  test "accepted person is updated in discourse" do
+    @fake_discourse.add_to_group("organization_members", people(:camilla))
+    people(:camilla).update(accepted: false, end_date: Date.today)
+    assert_equal @fake_discourse.list_group_members("organization_members"), []
+    people(:camilla).update(accepted: true, end_date: nil)
+    assert_equal @fake_discourse.list_group_members("organization_members"), ["camilla"]
+  end
 end
