@@ -1,21 +1,25 @@
 module Discourse
   class Client
-    URL = "http://forum.znatoki.site"
+    URL = "https://forum.znatoki.site"
     MAIN_GROUP = "organization_members"
+    MAIN_GROUP_ID = 57
 
     def initialize
-      @client = DiscourseApi::Client.new(URL)
-      @client.api_key = Rails.application.credentials.dig(:discourse_api, :key)
-      @client.api_username = Rails.application.credentials.dig(:discourse_api, :username)
+      @connection = Faraday.new(url: URL) do |connection|
+        connection.request :url_encoded
+        connection.adapter Faraday.default_adapter
+        connection.headers["Api-Key"] = Rails.application.credentials.dig(:discourse_api, :key)
+        connection.headers["Api-Username"] = Rails.application.credentials.dig(:discourse_api, :username)
+        connection.headers["Accept"] = "application/json"
+        connection.response :json, content_type: "application/json"
+      end
     end
 
-    # Pagination in the users endpoint works using page numbers instead of offsets, so we don’t use `list_all`.
     def list_users
       page = 0
       all_users = {}
-
       loop do
-        users = @client.list_users("active", {page:, show_emails: true})
+        users = @connection.get("/admin/users/list/active.json", {page:, show_emails: true}).body
         break if users.empty?
 
         users.each { |user| all_users[user["username"]] = user["email"] }
@@ -26,20 +30,39 @@ module Discourse
     end
 
     def list_group_members(group_name)
-      list_all(:group_members, %w[name username id], group_name)
+      offset = 0
+      limit = 100
+      all_members = []
+
+      loop do
+        items = @connection.get("groups/#{group_name}/members.json", {offset:, limit:}).body["members"]
+        break if items.empty?
+
+        all_members += items.map { |item| item.slice("id", "name", "username") }
+        offset += limit
+      end
+
+      all_members
     end
 
-    def add_to_group(group_name, *people)
-      usernames = Array(people).flatten.map(&:discourse_username)
-      @client.group_add(group_name, usernames)
+    def add_to_group(group_id, *people)
+      update_group_members(group_id, :put, people)
     end
 
-    def remove_from_group(group_name, *people)
-      usernames = Array(people).flatten.map(&:discourse_username)
-      @client.group_remove(group_name, usernames)
+    def remove_from_group(group_id, *people)
+      update_group_members(group_id, :delete, people)
     end
 
     private
+
+    def update_group_members(group_id, method, *people)
+      usernames = Array(people).flatten.map(&:discourse_username).compact.join(",")
+
+      @connection.send(method) do |req|
+        req.url "/groups/#{group_id}/members.json"
+        req.body = {usernames:}
+      end
+    end
 
     def list_all(method, keys, *args)
       offset = 0

@@ -16,7 +16,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   setup do
-    @fake_discourse = FakeDiscourse.new
+    @fake_discourse = FakeDiscourse.new({Discourse::Client::MAIN_GROUP => Discourse::Client::MAIN_GROUP_ID})
     Person.any_instance.stubs(:discourse_client).returns(@fake_discourse)
   end
 end

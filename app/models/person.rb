@@ -139,11 +139,11 @@ class Person < ApplicationRecord
   end
 
   def set_discourse_role
-    discourse_client.add_to_group(Discourse::Client::MAIN_GROUP, self)
+    discourse_client.add_to_group(Discourse::Client::MAIN_GROUP_ID, self)
   end
 
   def unset_discourse_role
-    discourse_client.remove_from_group(Discourse::Client::MAIN_GROUP, self)
+    discourse_client.remove_from_group(Discourse::Client::MAIN_GROUP_ID, self)
   end
 
   def discourse_client

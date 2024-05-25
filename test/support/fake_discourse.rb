@@ -3,21 +3,22 @@
 class FakeDiscourse
   attr_accessor :groups
 
-  def initialize
+  def initialize(group_ids_map)
+    @group_ids_map = group_ids_map
     @groups = Hash.new { |hash, key| hash[key] = Set.new }
   end
 
   def list_group_members(group_name)
-    @groups[group_name].to_a
+    @groups[@group_ids_map[group_name]].to_a
   end
 
-  def add_to_group(group_name, *people)
+  def add_to_group(group_id, *people)
     usernames = Array(people).flatten.map(&:discourse_username)
-    @groups[group_name].merge(usernames)
+    @groups[group_id].merge(usernames)
   end
 
-  def remove_from_group(group_name, *people)
+  def remove_from_group(group_id, *people)
     usernames = Array(people).flatten.map(&:discourse_username)
-    @groups[group_name].subtract(usernames)
+    @groups[group_id].subtract(usernames)
   end
 end
