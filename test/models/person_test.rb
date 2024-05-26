@@ -92,4 +92,20 @@ class PersonTest < ActiveSupport::TestCase
     people(:camilla).update(accepted: true, end_date: nil)
     assert_equal @fake_discourse.list_group_members(Discourse::Client::MAIN_GROUP), ["camilla"]
   end
+
+  test "suspended person is not active" do
+    people(:camilla).update(suspended: true)
+    assert_not people(:camilla).active?
+  end
+
+  test "suspended person does not count towards quorum" do
+    people(:camilla).update(suspended: true)
+    assert_not people(:camilla).counts_toward_quorum?
+  end
+
+  test "suspended person is removed from discourse" do
+    @fake_discourse.add_to_group(Discourse::Client::MAIN_GROUP_ID, people(:camilla))
+    people(:camilla).update(suspended: true)
+    assert_equal @fake_discourse.list_group_members(Discourse::Client::MAIN_GROUP), []
+  end
 end
