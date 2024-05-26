@@ -1,126 +1,83 @@
-require "date"
-require_relative "../connection_manager"
-
 module Discourse
   class Client
+    URL = "https://forum.znatoki.site"
     MAIN_GROUP = "organization_members"
+    MAIN_GROUP_ID = 57
 
-    class << self
-      def list_group_members(group_name: MAIN_GROUP)
-        query = <<~SQL
-          select users.name, ue.email
-          from users
-          join group_users on users.id = group_users.user_id
-          join groups on group_users.group_id = groups.id
-          join user_emails ue on users.id = ue.user_id
-          where groups.name = $1
-        SQL
+    def initialize
+      @connection = Faraday.new(url: URL) do |connection|
+        connection.request :url_encoded
+        connection.adapter Faraday.default_adapter
+        connection.headers["Api-Key"] = Rails.application.credentials.dig(:discourse_api, :key)
+        connection.headers["Api-Username"] = Rails.application.credentials.dig(:discourse_api, :username)
+        connection.headers["Accept"] = "application/json"
+        connection.response :json, content_type: "application/json"
+      end
+    end
 
-        execute_with_params(query, group_name).to_a
+    def list_users
+      page = 0
+      all_users = {}
+      loop do
+        users = @connection.get("/admin/users/list/active.json", {page:, show_emails: true}).body
+        break if users.empty?
+
+        users.each { |user| all_users[user["username"]] = user["email"] }
+        page += 1
       end
 
-      def get_votes(group_name: MAIN_GROUP)
-        group_filter = if group_name.nil?
-          ""
-        else
-          "where p.groups = '#{group_name}'"
-        end
+      all_users
+    end
 
-        query = <<~SQL
-          with poll_dates as (
-              select p.id, min(poll_votes.created_at) as poll_start
-              from polls p
-              join poll_votes on p.id = poll_votes.poll_id
-              #{group_filter}
-              group by p.id
-          )
-          
-          select distinct ue.email, pd.poll_start::date as date, pd.id as poll_id
-          from poll_dates pd
-          join poll_votes on pd.id = poll_votes.poll_id
-          join user_emails ue on poll_votes.user_id = ue.user_id
-        SQL
+    def list_group_members(group_name)
+      offset = 0
+      limit = 100
+      all_members = []
 
-        execute(query).to_a
+      loop do
+        items = @connection.get("groups/#{group_name}/members.json", {offset:, limit:}).body["members"]
+        break if items.empty?
+
+        all_members += items.map { |item| item.slice("id", "name", "username") }
+        offset += limit
       end
 
-      def add_to_group(email, group_name)
-        group_id = fetch_group_id(group_name)
-        return if group_id.nil?
+      all_members
+    end
 
-        user_id = fetch_user_id(email)
-        return if user_id.nil?
+    def add_to_group(group_id, *people)
+      update_group_members(group_id, :put, people)
+    end
 
-        query = <<~SQL
-          insert into group_users (group_id, user_id, created_at, updated_at)
-          values ($1, $2, now(), now())
-        SQL
+    def remove_from_group(group_id, *people)
+      update_group_members(group_id, :delete, people)
+    end
 
-        execute_with_params(query, [group_id, user_id])
-      rescue PG::UniqueViolation
-        # Already added to the group
+    private
+
+    def update_group_members(group_id, method, *people)
+      usernames = Array(people).flatten.map(&:discourse_username).compact.join(",")
+
+      @connection.send(method) do |req|
+        req.url "/groups/#{group_id}/members.json"
+        req.body = {usernames:}
+      end
+    end
+
+    def list_all(method, keys, *args)
+      offset = 0
+      limit = 100
+      all_items = []
+
+      loop do
+        items = @client.send(method, *args, {offset:, limit:})
+        break if items.empty?
+
+        all_items += items.map { |item| item.slice(*keys) }
+        offset += limit
       end
 
-      def remove_from_group(email, group_name)
-        group_id = fetch_group_id(group_name)
-        return if group_id.nil?
-
-        user_id = fetch_user_id(email)
-        return if user_id.nil?
-
-        query = <<~SQL
-          delete from group_users
-          where user_id = $1
-              and group_id = $2;
-        SQL
-
-        execute_with_params(query, [group_id, user_id])
-      end
-
-      def fetch_group_id(group_name)
-        query = <<~SQL
-          select id
-          from groups
-          where groups.name = $1;
-        SQL
-
-        execute_with_params(query, group_name).getvalue(0, 0)
-      rescue ArgumentError
-        nil
-      end
-
-      def fetch_user_id(email)
-        query = <<~SQL
-          select user_id
-          from user_emails
-          where email = $1
-        SQL
-
-        execute_with_params(query, email).getvalue(0, 0)
-      rescue ArgumentError
-        nil
-      end
-
-      def execute(query)
-        ConnectionManager.connection_pool.with do |connection|
-          connection.exec(query)
-        end
-      end
-
-      def execute_with_params(query, params)
-        params = [params] unless params.is_a?(Array)
-
-        ConnectionManager.connection_pool.with do |connection|
-          connection.exec_params(query, params)
-        rescue PG::UnableToSend, PG::ConnectionBad
-          Rails.logger.warn("Reloading connection pool")
-          ConnectionManager.connection_pool.reload
-          Rails.logger.warn("Reloaded connection pool")
-          sleep(1)
-          Rails.logger.warn("Retrying query")
-          retry
-        end
-      end
+      all_items
     end
   end
 end

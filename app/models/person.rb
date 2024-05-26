@@ -7,7 +7,7 @@ class Person < ApplicationRecord
   MISSED_ASSEMBLIES_LIMIT = 3
 
   rails_admin do
-    include_fields :name, :cyrillic_name, :email, :accepted, :newsletter, :start_date, :end_date
+    include_fields :name, :cyrillic_name, :email, :discourse_username, :accepted, :newsletter, :start_date, :end_date
     exclude_fields :created_at, :updated_at, :id
 
     label "Человек"
@@ -35,6 +35,10 @@ class Person < ApplicationRecord
 
     configure :newsletter do
       label "Рассылка"
+    end
+
+    configure :discourse_username do
+      label "Юзернейм на форуме"
     end
   end
 
@@ -135,10 +139,14 @@ class Person < ApplicationRecord
   end
 
   def set_discourse_role
-    Discourse::Client.add_to_group(email, Discourse::Client::MAIN_GROUP)
+    discourse_client.add_to_group(Discourse::Client::MAIN_GROUP_ID, self)
   end
 
   def unset_discourse_role
-    Discourse::Client.remove_from_group(email, Discourse::Client::MAIN_GROUP)
+    discourse_client.remove_from_group(Discourse::Client::MAIN_GROUP_ID, self)
+  end
+
+  def discourse_client
+    Discourse::Client.new
   end
 end

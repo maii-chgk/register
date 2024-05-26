@@ -115,6 +115,12 @@ GEM
       warden (~> 1.2.3)
     drb (2.2.1)
     erubi (1.12.0)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.16.3)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -160,9 +166,14 @@ GEM
     minitest-rails (7.1.0)
       minitest (~> 5.20)
       railties (~> 7.1.0)
+    mocha (2.3.0)
+      ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
+    multipart-post (2.4.1)
     mutex_m (0.2.0)
     nested_form (0.3.2)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.11)
       date
       net-protocol
@@ -271,6 +282,7 @@ GEM
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.30.0, < 2.0)
     ruby-progressbar (1.13.0)
+    ruby2_keywords (0.0.5)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -317,6 +329,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -340,10 +353,13 @@ DEPENDENCIES
   bootsnap (>= 1.15)
   connection_pool
   devise (~> 4.9.0)
+  faraday
+  faraday-multipart
   honeybadger
   jsbundling-rails
   listen
   minitest-rails
+  mocha
   paper_trail (~> 15.1.0)
   pg (~> 1.4)
   puma (~> 6.0)

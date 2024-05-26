@@ -14,10 +14,13 @@ gem "pg", "~> 1.4"
 gem "connection_pool"
 gem "aws-sdk-s3", "~> 1.96"
 gem "honeybadger"
+gem "faraday"
+gem "faraday-multipart"
 
 group :development, :test do
   gem "minitest-rails"
   gem "standard"
+  gem "mocha"
 end
 
 group :development do

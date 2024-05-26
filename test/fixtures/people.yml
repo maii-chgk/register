@@ -3,24 +3,34 @@ gideon:
   name: gideon
   start_date: 2021-04-09
   accepted: true
+  discourse_username: gideon
+  discourse_id: 1
 harrow:
   email: harrow@example.com
   name: harrow
   start_date: 2021-04-09
   accepted: true
+  discourse_username: harrow
+  discourse_id: 2
 camilla:
   email: camilla@example.com
   name: camilla
   start_date: 2022-08-01
   end_date: 2099-01-01
   accepted: true
+  discourse_username: camilla
+  discourse_id: 3
 palamedes:
   email: palamedes@example.com
   name: palamedes
   start_date: 2021-04-09
   end_date: 2022-06-01
   accepted: true
+  discourse_username: palamedes
+  discourse_id: 4
 pyrrha:
   email: pyrrha@example.com
   name: pyrrha
   accepted: false
+  discourse_username: pyrrha
+  discourse_id: 5
