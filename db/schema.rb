@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_19_111026) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_26_155512) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_111026) do
     t.boolean "newsletter", default: false
     t.string "discourse_username"
     t.integer "discourse_id"
+    t.boolean "suspended"
   end
 
   create_table "versions", force: :cascade do |t|

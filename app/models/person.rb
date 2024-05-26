@@ -7,7 +7,8 @@ class Person < ApplicationRecord
   MISSED_ASSEMBLIES_LIMIT = 3
 
   rails_admin do
-    include_fields :name, :cyrillic_name, :email, :discourse_username, :accepted, :newsletter, :start_date, :end_date
+    include_fields :name, :cyrillic_name, :email, :discourse_username, :accepted, :suspended, :newsletter,
+      :start_date, :end_date
     exclude_fields :created_at, :updated_at, :id
 
     label "Человек"
@@ -40,6 +41,10 @@ class Person < ApplicationRecord
     configure :discourse_username do
       label "Юзернейм на форуме"
     end
+
+    configure :suspended do
+      label "Приостановлен(а)"
+    end
   end
 
   def self.members_count
@@ -59,7 +64,7 @@ class Person < ApplicationRecord
   end
 
   def counts_toward_quorum?
-    counts_toward_quorum_on?(Date.today)
+    counts_toward_quorum_on?(Date.today) && !suspended
   end
 
   def counts_toward_quorum_on?(date)
@@ -92,7 +97,7 @@ class Person < ApplicationRecord
   end
 
   def active?
-    active_on?(Date.today)
+    active_on?(Date.today) && !suspended
   end
 
   def active_on?(date)
@@ -129,7 +134,7 @@ class Person < ApplicationRecord
   end
 
   def maybe_change_membership
-    return unless saved_change_to_accepted?
+    return unless saved_change_to_accepted? || saved_change_to_suspended?
 
     if active?
       set_discourse_role
