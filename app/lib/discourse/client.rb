@@ -3,6 +3,8 @@ module Discourse
     URL = "https://forum.znatoki.site"
     MAIN_GROUP = "organization_members"
     MAIN_GROUP_ID = 57
+    SUSPENDED_GROUP = "suspended"
+    SUSPENDED_GROUP_ID = 67
 
     def initialize
       @connection = Faraday.new(url: URL) do |connection|
