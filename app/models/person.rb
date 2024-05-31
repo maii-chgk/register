@@ -52,6 +52,7 @@ class Person < ApplicationRecord
     Person
       .where(accepted: true)
       .where("end_date is null or end_date > current_date")
+      .where(suspended: [false, nil])
       .count
   end
 
@@ -70,6 +71,7 @@ class Person < ApplicationRecord
 
   def counts_toward_quorum_on?(date)
     return false unless active_on?(date)
+    return false if suspended && date == Date.today
 
     assemblies_that_could_attend = Assembly
       .where("start_date >= ?", start_date)
