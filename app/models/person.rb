@@ -56,6 +56,14 @@ class Person < ApplicationRecord
       .count
   end
 
+  def self.suspended_count
+    Person
+      .where(accepted: true)
+      .where("end_date is null or end_date > current_date")
+      .where(suspended: true)
+      .count
+  end
+
   def self.count_toward_quorum
     count_toward_quorum_on(Date.today)
   end
