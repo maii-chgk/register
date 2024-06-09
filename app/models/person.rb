@@ -1,6 +1,7 @@
 class Person < ApplicationRecord
-  after_update :maybe_change_membership
-  after_destroy :unset_discourse_role
+  after_update :maybe_change_discourse_group_membership
+  after_destroy :remove_from_suspended_discourse_group
+  after_destroy :remove_from_active_discourse_group
 
   has_paper_trail
 
@@ -51,6 +52,15 @@ class Person < ApplicationRecord
     Person
       .where(accepted: true)
       .where("end_date is null or end_date > current_date")
+      .where(suspended: [false, nil])
+      .count
+  end
+
+  def self.suspended_count
+    Person
+      .where(accepted: true)
+      .where("end_date is null or end_date > current_date")
+      .where(suspended: true)
       .count
   end
 
@@ -69,6 +79,7 @@ class Person < ApplicationRecord
 
   def counts_toward_quorum_on?(date)
     return false unless active_on?(date)
+    return false if suspended && date == Date.today
 
     assemblies_that_could_attend = Assembly
       .where("start_date >= ?", start_date)
@@ -133,22 +144,40 @@ class Person < ApplicationRecord
       .size > 0
   end
 
-  def maybe_change_membership
-    return unless saved_change_to_accepted? || saved_change_to_suspended?
+  def maybe_change_discourse_group_membership
+    if saved_change_to_accepted?
+      if active?
+        add_to_active_discourse_group
+      else
+        remove_from_active_discourse_group
+      end
+    end
 
-    if active?
-      set_discourse_role
-    else
-      unset_discourse_role
+    if saved_change_to_suspended?
+      if suspended
+        add_to_suspended_discourse_group
+        remove_from_active_discourse_group
+      else
+        remove_from_suspended_discourse_group
+        add_to_active_discourse_group
+      end
     end
   end
 
-  def set_discourse_role
+  def add_to_active_discourse_group
     discourse_client.add_to_group(Discourse::Client::MAIN_GROUP_ID, self)
   end
 
-  def unset_discourse_role
+  def remove_from_active_discourse_group
     discourse_client.remove_from_group(Discourse::Client::MAIN_GROUP_ID, self)
+  end
+
+  def add_to_suspended_discourse_group
+    discourse_client.add_to_group(Discourse::Client::SUSPENDED_GROUP_ID, self)
+  end
+
+  def remove_from_suspended_discourse_group
+    discourse_client.remove_from_group(Discourse::Client::SUSPENDED_GROUP_ID, self)
   end
 
   def discourse_client
