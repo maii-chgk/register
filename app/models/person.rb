@@ -8,9 +8,13 @@ class Person < ApplicationRecord
   MISSED_ASSEMBLIES_LIMIT = 3
 
   rails_admin do
+    list do
+      checkboxes false
+    end
+
     include_fields :name, :cyrillic_name, :email, :discourse_username, :accepted, :suspended, :newsletter,
       :start_date, :end_date
-    exclude_fields :created_at, :updated_at, :id
+    exclude_fields :created_at, :updated_at, :id, :discourse_id
 
     label "Человек"
     label_plural "Люди"
@@ -45,6 +49,11 @@ class Person < ApplicationRecord
 
     configure :suspended do
       label "Приостановлен(а)"
+    end
+
+    field :counts_toward_quorum do
+      formatted_value { bindings[:object].counts_toward_quorum? }
+      label "Действителен"
     end
   end
 
