@@ -8,7 +8,7 @@ gem "turbolinks", "~> 5"
 gem "bootsnap", ">= 1.15", require: false
 gem "jsbundling-rails"
 gem "rails_admin", "~> 3.1"
-gem "devise", "~> 4.9.0"
+gem "devise", "~> 4.9.4"
 gem "paper_trail", "~> 15.1.0"
 gem "aws-sdk-s3", "~> 1.96"
 gem "honeybadger"
