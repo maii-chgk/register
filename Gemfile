@@ -16,6 +16,7 @@ gem "aws-sdk-s3", "~> 1.96"
 gem "honeybadger"
 gem "faraday"
 gem "faraday-multipart"
+gem "faraday-retry"
 
 group :development, :test do
   gem "minitest-rails"

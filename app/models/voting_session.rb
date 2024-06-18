@@ -1,6 +1,7 @@
 class VotingSession < ApplicationRecord
   has_paper_trail
   has_many :votes
+  has_many :voting_topics
 
   def self.for_date(date)
     VotingSession.where("start_date <= ? and end_date >= ?", date, date).first
@@ -15,11 +16,6 @@ class VotingSession < ApplicationRecord
   end
 
   rails_admin do
-    exclude_fields :created_at, :updated_at, :id, :votes
-
-    label "Электронное голосование"
-    label_plural "Электронные голосования"
-
     configure :start_date do
       label "Дата начала"
     end
@@ -28,12 +24,35 @@ class VotingSession < ApplicationRecord
       label "Дата окончания"
     end
 
-    field :votes_count do
+    configure :votes_count do
       label "Голоса"
     end
 
-    field :voters_count do
+    configure :voters_count do
       label "Участники"
     end
+
+    list do
+      field :id
+      field :start_date
+      field :end_date
+      field :votes_count
+      field :voters_count
+    end
+
+    show do
+      field :start_date
+      field :end_date
+      field :votes_count
+      field :voters_count
+    end
+
+    edit do
+      field :start_date
+      field :end_date
+    end
+
+    label "Электронное голосование"
+    label_plural "Электронные голосования"
   end
 end

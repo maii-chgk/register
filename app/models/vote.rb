@@ -2,6 +2,7 @@ class Vote < ApplicationRecord
   belongs_to :person, -> { distinct }
   belongs_to :assembly, optional: true
   belongs_to :voting_session, optional: true
+  belongs_to :voting_topic
 
   has_paper_trail
 

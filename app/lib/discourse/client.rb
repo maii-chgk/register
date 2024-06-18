@@ -6,6 +6,8 @@ module Discourse
     SUSPENDED_GROUP = "suspended"
     SUSPENDED_GROUP_ID = 67
 
+    attr_reader :connection
+
     def initialize
       @connection = Faraday.new(url: URL) do |connection|
         connection.request :url_encoded
@@ -14,6 +16,7 @@ module Discourse
         connection.headers["Api-Username"] = Rails.application.credentials.dig(:discourse_api, :username)
         connection.headers["Accept"] = "application/json"
         connection.response :json, content_type: "application/json"
+        connection.request :retry, max: 3, interval: 1, backoff_factor: 2, retry_statuses: [429]
       end
     end
 
@@ -21,7 +24,7 @@ module Discourse
       page = 0
       all_users = {}
       loop do
-        users = @connection.get("/admin/users/list/active.json", {page:, show_emails: true}).body
+        users = connection.get("/admin/users/list/active.json", {page:, show_emails: true}).body
         break if users.empty?
 
         users.each { |user| all_users[user["username"]] = user["email"] }
@@ -37,10 +40,10 @@ module Discourse
       all_members = []
 
       loop do
-        items = @connection.get("groups/#{group_name}/members.json", {offset:, limit:}).body["members"]
+        items = connection.get("groups/#{group_name}/members.json", {offset:, limit:}).body["members"]
         break if items.empty?
 
-        all_members += items.map { |item| item.slice("id", "name", "username") }
+        all_members += items.pluck("id", "name", "username")
         offset += limit
       end
 
@@ -55,12 +58,57 @@ module Discourse
       update_group_members(group_id, :delete, people)
     end
 
+    def list_all_voters_for_topic(topic_id)
+      post = get_first_post(topic_id)
+      polls_div = Nokogiri::HTML(post["cooked"]).css(".poll")
+      polls_count = polls_div.size
+      return [] if polls_count == 0
+
+      voters = Set.new
+      poll_names = polls_div.map { |poll_div| poll_div["data-poll-name"] }
+      poll_names.each do |poll_name|
+        Rails.logger.info "Listing voters for poll #{poll_name} in topic #{topic_id}"
+        voters.merge(list_voters(post["id"], poll_name))
+        sleep 1
+      end
+      voters
+    end
+
     private
+
+    def get_first_post(topic_id)
+      connection
+        .get("/t/#{topic_id}.json")
+        .body
+        .dig("post_stream", "posts")
+        .first
+        .slice("id", "cooked")
+    end
+
+    def list_voters(post_id, poll_name)
+      page = 1
+      all_voters = []
+
+      loop do
+        voters = connection.get("/polls/voters.json", {post_id:, page:, poll_name:})
+          .body["voters"]
+
+        if voters.blank?
+          Rails.logger.warn "No voters found for poll #{poll_name} in post #{post_id}" if all_voters.empty?
+          break
+        end
+
+        all_voters += voters.values.flatten.pluck("username", "id")
+        page += 1
+      end
+
+      all_voters
+    end
 
     def update_group_members(group_id, method, *people)
       usernames = Array(people).flatten.map(&:discourse_username).compact.join(",")
 
-      @connection.send(method) do |req|
+      connection.send(method) do |req|
         req.url "/groups/#{group_id}/members.json"
         req.body = {usernames:}
       end
