@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_26_155512) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_17_204740) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -73,11 +73,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_155512) do
     t.integer "person_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "assembly_id"
     t.integer "voting_session_id"
-    t.integer "poll_id"
-    t.index ["assembly_id"], name: "index_votes_on_assembly_id"
-    t.index ["voting_session_id"], name: "index_votes_on_voting_session_id"
+    t.integer "assembly_id"
+    t.integer "voting_topic_id"
+    t.index ["voting_topic_id"], name: "index_votes_on_voting_topic_id"
   end
 
   create_table "voting_sessions", force: :cascade do |t|
@@ -87,6 +86,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_155512) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "votes", "assemblies"
-  add_foreign_key "votes", "voting_sessions"
+  create_table "voting_topics", force: :cascade do |t|
+    t.integer "topic_id"
+    t.integer "assembly_id"
+    t.integer "voting_session_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assembly_id"], name: "index_voting_topics_on_assembly_id"
+    t.index ["voting_session_id"], name: "index_voting_topics_on_voting_session_id"
+  end
+
+  add_foreign_key "votes", "voting_topics"
+  add_foreign_key "voting_topics", "assemblies"
+  add_foreign_key "voting_topics", "voting_sessions"
 end

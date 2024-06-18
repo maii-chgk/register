@@ -1,46 +1,65 @@
 require_relative "../../app/lib/discourse/client"
 
-desc "Import votes"
-task import_votes: :environment do
-  votes = Discourse::DbClient.get_votes
+task :import_votes_for_assembly, [:assembly_id] => :environment do |_, args|
+  import_vote_for_assembly(args[:assembly_id])
+end
 
-  votes.each do |vote|
-    email, date, poll_id = vote["email"], vote["date"], vote["poll_id"]
-    person = Person.find_by(email: email)
-    if person.nil?
-      puts "person with email #{email} missing"
-      next
-    end
-
-    assembly = Assembly.for_date(date)
-    voting_session = VotingSession.for_date(date)
-
-    Vote.create_or_find_by(date: date,
-      person: person,
-      poll_id: poll_id,
-      assembly: assembly,
-      voting_session: voting_session)
+task import_votes_for_all_assemblies: :environment do
+  Assembly.all.each do |assembly|
+    Rails.logger.info "Importing votes for assembly #{assembly.id}"
+    import_vote_for_assembly(assembly.id)
   end
 end
 
-desc "Import votes for date"
-task :import_votes_for_date, [:date] => :environment do
-  assembly = Assembly.for_date(date)
-  voting_session = VotingSession.for_date(date)
-  votes = Discourse::DbClient.get_votes
-  date_votes = votes.select { |vote| vote["date"] == date }
+task :import_votes_for_voting_session, [:voting_session_id] => :environment do |_, args|
+  import_vote_for_voting_session(args[:voting_session_id])
+end
 
-  date_votes.each do |vote|
-    person = Person.find_by(email: vote["email"])
-    if person.nil?
-      puts "person with email #{email} missing"
-      next
+task import_votes_for_all_voting_sessions: :environment do
+  VotingSession.all.each do |voting_session|
+    Rails.logger.info "Importing votes for voting session #{voting_session.id}"
+    import_vote_for_voting_session(voting_session.id)
+  end
+end
+
+def import_vote_for_assembly(assembly_id)
+  assembly = Assembly.find(assembly_id)
+  return if assembly.nil?
+
+  client = Discourse::Client.new
+  assembly.voting_topics.each do |voting_topic|
+    Rails.logger.info "Listing voters for topic #{voting_topic.topic_id}"
+    voters = client.list_all_voters_for_topic(voting_topic.topic_id)
+
+    voters.each do |discourse_username, _discourse_id|
+      person = Person.find_by(discourse_username:)
+      if person.nil?
+        Rails.logger.warn "person with discourse_username #{discourse_username} not found"
+        next
+      end
+
+      Vote.find_or_create_by(person:, voting_topic:, assembly:, date: assembly.start_date)
     end
+  end
+end
 
-    Vote.create_or_find_by(date: vote["date"],
-      person: person,
-      poll_id: vote["poll_id"],
-      assembly: assembly,
-      voting_session: voting_session)
+def import_vote_for_voting_session(voting_session_id)
+  voting_session = VotingSession.find(voting_session_id)
+  return if voting_session.nil?
+
+  client = Discourse::Client.new
+  voting_session.voting_topics.each do |voting_topic|
+    Rails.logger.info "Listing voters for topic #{voting_topic.topic_id}"
+    voters = client.list_all_voters_for_topic(voting_topic.topic_id)
+
+    voters.each do |discourse_username, _discourse_id|
+      person = Person.find_by(discourse_username:)
+      if person.nil?
+        Rails.logger.warn "person with discourse_username #{discourse_username} not found"
+        next
+      end
+
+      Vote.find_or_create_by(person:, voting_topic:, voting_session:, date: voting_session.start_date)
+    end
   end
 end
