@@ -50,11 +50,6 @@ class Person < ApplicationRecord
     configure :suspended do
       label "Приостановлен(а)"
     end
-
-    field :counts_toward_quorum do
-      formatted_value { bindings[:object].counts_toward_quorum? }
-      label "Действителен"
-    end
   end
 
   def self.members_count
