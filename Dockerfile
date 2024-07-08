@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
 # Install JavaScript dependencies
 ENV BUN_INSTALL=/usr/local/bun
 ENV PATH=/usr/local/bun/bin:$PATH
-ARG BUN_VERSION=1.1.8
+ARG BUN_VERSION=1.1.18
 RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
 
 # Install application gems
